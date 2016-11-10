@@ -6,6 +6,7 @@
 var searchForm = document.querySelector("#search-form");
 var keywordInput = searchForm.querySelector("input[name='url']");
 var fileTextarea = document.querySelector("#file-contents");
+var tsUrlTextarea = document.querySelector('#ts-urls');
 
 searchForm.addEventListener("submit", function(e) {
   e.preventDefault();
@@ -18,11 +19,10 @@ searchForm.addEventListener("submit", function(e) {
     if (request.status >= 200 && request.status < 400) {
       // Success!
       var resp = request.responseText;
-      alert('resp:' + resp);
       fileTextarea.value = resp;
+      parseFileContents(resp);
     } else {
       // We reached our target server, but it returned an error
-
     }
   };
 
@@ -34,3 +34,13 @@ searchForm.addEventListener("submit", function(e) {
 
   return false;
 }, false);
+
+function parseFileContents(str) {
+  var arr = str.split("\n");
+  var tsArr = arr.filter(function(v){
+    return v.indexOf('.ts') > 1;
+  });
+  tsUrlTextarea.value = tsArr.join("\n");
+  //return tsArr;
+  //console.log('tsArr:', tsArr);
+}
