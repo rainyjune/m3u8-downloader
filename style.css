@@ -1,5 +1,14 @@
-#file-contents {
+#search-form input[name=url] {
+  width: 400px;
+  height: 30px;
+  margin-right: 10px;
+}
+#search-form input[type=submit] {
+  height: 36px;
+  width: 50px;
+}
+
+textarea {
   width: 100%;
   min-height: 50px;
-  max-height: 500px;  
 }
