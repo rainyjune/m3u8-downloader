@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/rainyjune/m3u8-downloader",
   "keywords": [
     "m3u8",
     "HLS",
