@@ -7,15 +7,15 @@ const path = require('path');
 
 document.addEventListener('DOMContentLoaded', (event) => {
 
-  var searchForm = document.querySelector("#search-form"),
-      keywordInput = searchForm.querySelector("input[name='url']"),
-      fileTextarea = document.querySelector("#file-contents"),
-      tsUrlTextarea = document.querySelector('#ts-urls');
+  const searchForm = dom("#search-form"),
+      keywordInput = dom("input[name='url']"),
+      fileTextarea = dom("#file-contents"),
+      tsUrlTextarea = dom('#ts-urls');
 
   searchForm.addEventListener("submit", (e) => {
     e.preventDefault();
     e.stopPropagation();
-    var m3u8Url = keywordInput.value;
+    let m3u8Url = keywordInput.value;
     
     fetch(m3u8Url).then(function(response){
       return response.text();
@@ -29,12 +29,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }, false);
 
   function parseFileContents(str, m3u8Url) {
-    var arr = str.split("\n");
-    var tsArr = arr.filter(function(v){
+    let arr = str.split("\n");
+    let tsArr = arr.filter((v) => {
       return v.indexOf('.ts') > 1;
     });
-    var urlObject = url.parse(m3u8Url);
-    tsArr.forEach(function(v, index, array) {
+    let urlObject = url.parse(m3u8Url);
+    tsArr.forEach((v, index, array) => {
       if (!~v.indexOf('http')) {
         array[index] = urlObject.protocol + '//' + urlObject.host + path.dirname(urlObject.pathname) + '/' + v;
       }
@@ -43,3 +43,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
 
 });
+
+function dom(selector) {
+  return document.querySelector(selector);
+}
