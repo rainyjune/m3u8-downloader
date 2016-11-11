@@ -4,6 +4,7 @@
 const http = require('http');
 const url = require('url');
 const path = require('path');
+const fs = require('fs');
 
 document.addEventListener('DOMContentLoaded', (event) => {
 
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   function parseFileContents(str, m3u8Url) {
     let arr = str.split("\n");
     let tsArr = arr.filter((v) => {
-      return v.indexOf('.ts') > 1;
+      return (v.indexOf('.ts') > 1) || (v.indexOf('.webm') > 1);
     });
     let urlObject = url.parse(m3u8Url);
     tsArr.forEach((v, index, array) => {
@@ -40,6 +41,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       }
     });
     tsUrlTextarea.value = tsArr.join("\n");
+    
+    downloadFilelist(tsArr);
+    
   }
 
 });
@@ -47,3 +51,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function dom(selector) {
   return document.querySelector(selector);
 }
+
+function downloadFilelist(fileArr) {
+  fileArr.forEach(function(file){
+    var pathname = url.parse(file).path;
+    var filename = path.basename(pathname);
+    download(file, './ts/' + filename, function(data){
+      console.log(file + ' finished');
+    });
+  });  
+}
+
+function download(url, dest, cb) {
+  let file = fs.createWriteStream(dest);
+  //return false;
+  let request = http.get(url, function(response) {
+    response.pipe(file);
+    file.on('finish', () => {
+      file.close(cb);  // close() is async, call cb after close completes.
+    });
+  }).on('error', (err) => { // Handle errors
+    fs.unlink(dest); // Delete the file async. (But we don't check the result)
+    if (cb) cb(err.message);
+  });
+};
