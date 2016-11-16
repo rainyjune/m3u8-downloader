@@ -74,4 +74,4 @@ function download(url, dest, cb) {
     fs.unlink(dest); // Delete the file async. (But we don't check the result)
     if (cb) cb(err.message);
   });
-};
+}
